@@ -1,0 +1,17 @@
+asgiref==3.2.3
+certifi==2019.11.28
+chardet==3.0.4
+Click==7.0
+Flask==1.1.1
+idna==2.8
+itsdangerous==1.1.0
+Jinja2==2.10.3
+MarkupSafe==1.1.1
+pip==19.0.3
+pytz==2019.3
+requests==2.22.0
+setuptools==40.8.0
+sqlparse==0.3.0
+urllib3==1.25.7
+Werkzeug==0.16.0
+python-dateutil==2.8.0

@@ -1,0 +1,10 @@
+---
+applications:
+- name: toolapi
+  memory: 128M
+  buildpacks: 
+  - python_buildpack
+  routes:
+  - route: toolapi.us-south.cf.appdomain.cloud
+  health-check-type: process
+  command: python main.py
