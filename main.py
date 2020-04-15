@@ -8,6 +8,7 @@ import time
 import re
 import pytz
 from dateutil.parser import parse
+import jsonpath
 
 app = Flask(__name__)
 #app.config['SECRET_KEY'] = 'hard to guess string'
@@ -43,6 +44,50 @@ def timestamp():
                      Rtv["时间戳"] = int(d.timestamp())
                 Rtv["时间"] = t
         Rtv["状态"] = "OK"
+    except Exception as e:
+        Rtv["状态"] = str(e)
+
+    return Response(json.dumps(Rtv, ensure_ascii=False, indent=4), mimetype='application/json')
+
+@app.route('/jsondata', methods=['GET', 'POST'])
+def jsondata():
+    # 从json数据里取值并返回,需要懂jsonpath的用法
+    Rtv = {}
+    ds = request.args.get("data", default="")
+    p = request.args.get("p", default="")
+    try:
+        ds = json.loads(ds)
+        temp = {}
+        data = jsonpath.jsonpath(ds,expr=p)
+        if (data):
+            for cnt in range (1, len(data)+1):
+                temp[cnt] = data[cnt - 1]
+            Rtv["数据"] = temp
+            Rtv["状态"] = "OK"
+        else:
+            Rtv["状态"] = "没匹配到数据"
+    except Exception as e:
+        Rtv["状态"] = str(e)
+        
+    return Response(json.dumps(Rtv, ensure_ascii=False, indent=4), mimetype='application/json')
+
+@app.route('/regex', methods=['GET', 'POST'])
+def regex():
+    # 字符串正则匹配后返回结果
+    Rtv = {}
+    ds = request.args.get("data", default="")
+    p = request.args.get("p", default="")
+
+    try:
+        temp = {}
+        data = re.findall(p, ds, re.IGNORECASE)
+        if (len(data) > 0):
+            for cnt in range (0, len(data)):
+                temp[cnt+1] = data[cnt]
+            Rtv["数据"] = temp
+            Rtv["状态"] = "OK"
+        else:
+            Rtv["状态"] = "没匹配到数据"
     except Exception as e:
         Rtv["状态"] = str(e)
 

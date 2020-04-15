@@ -18,14 +18,15 @@ td, h1, h2, h3, h4, h5, p, ul, ol, li {
     <h1 id="section">这是什么?</h1>
     <p>一个简单的工具API</p>
     <h1 id="section-1">功能</h1>
-    <h2 id="section-2">1. 时间戳转换</h2>
+    <h2 id="timestamp">1. 时间戳转换（/timestamp）</h2>
     <p>目前仅支持GMT+8 北京时间</p>
-    <h3 id="section-3">1.1 参数</h3>
+    <h3 id="section-2">1.1 参数</h3>
     <table>
       <thead>
         <tr>
           <th style="text-align: center;">参数</th>
           <th style="text-align: center;">默认值</th>
+          <th style="text-align: left;">是否必要参数</th>
           <th style="text-align: left;">解释</th>
         </tr>
       </thead>
@@ -33,21 +34,24 @@ td, h1, h2, h3, h4, h5, p, ul, ol, li {
         <tr>
           <td style="text-align: center;">t</td>
           <td style="text-align: center;">now</td>
+          <td style="text-align: left;">是</td>
           <td style="text-align: left;">要转换成时间戳的北京时间</td>
         </tr>
         <tr>
           <td style="text-align: center;">ts</td>
           <td style="text-align: center;">null</td>
+          <td style="text-align: left;">是</td>
           <td style="text-align: left;">要转换成北京时间的时间戳</td>
         </tr>
         <tr>
           <td style="text-align: center;">form</td>
           <td style="text-align: center;">%Y-%m-%d %H:%M:%S</td>
+          <td style="text-align: left;">否</td>
           <td style="text-align: left;">输出的时间格式</td>
         </tr>
       </tbody>
     </table>
-    <h3 id="section-4">1.2 返回值</h3>
+    <h3 id="section-3">1.2 返回值</h3>
     <table>
       <thead>
         <tr>
@@ -70,10 +74,10 @@ td, h1, h2, h3, h4, h5, p, ul, ol, li {
         </tr>
       </tbody>
     </table>
-    <h3 id="section-5">1.3 用例</h3>
+    <h3 id="section-4">1.3 用例</h3>
     <pre>
       <code>https://toolapi.us-south.cf.appdomain.cloud/timestamp  
-返回现在时间
+返回现在北京时间
 {
     "时间戳": 1586917839,
     "时间": "2020-04-15 10:30:39",
@@ -97,6 +101,76 @@ td, h1, h2, h3, h4, h5, p, ul, ol, li {
 {
     "时间戳": 1586919609,
     "时间": "2020-04-15 11:00:09",
+    "状态": "OK"
+}
+</code>
+    </pre>
+    <h2 id="regex">2.正则表达是（/regex）</h2>
+    <p>正则匹配参数并返回匹配结果</p>
+    <h3 id="section-5">2.1 参数</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: center;">参数</th>
+          <th style="text-align: center;">默认值</th>
+          <th style="text-align: left;">是否必要参数</th>
+          <th style="text-align: left;">解释</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: center;">data</td>
+          <td style="text-align: center;">""</td>
+          <td style="text-align: left;">是</td>
+          <td style="text-align: left;">要匹配的数据</td>
+        </tr>
+        <tr>
+          <td style="text-align: center;">p</td>
+          <td style="text-align: center;">""</td>
+          <td style="text-align: left;">是</td>
+          <td style="text-align: left;">正则表达式</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="section-6">2.2 返回值</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: center;">参数</th>
+          <th style="text-align: left;">解释</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: center;">数据</td>
+          <td style="text-align: left;">匹配的结果</td>
+        </tr>
+        <tr>
+          <td style="text-align: center;">状态</td>
+          <td style="text-align: left;">运行的状态, 非OK都是异常</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="section-7">2.3 用例</h3>
+    <pre>
+      <code>https://toolapi.us-south.cf.appdomain.cloud/regex?data=%7b"code"%3a0%2c"msg"%3a"成功"%2c"data"%3a%7b"users"%3a%5b%7b"name"%3a"张三"%2c"gender"%3a"male"%2c"age"%3a12%7d%2c%7b"name"%3a"李四"%2c"gender"%3a"female"%2c"age"%3a15%7d%2c%7b"name"%3a"王五"%2c"gender"%3a"male"%2c"age"%3a22%7d%2c%7b"name"%3a"赵六"%2c"gender"%3a"male"%2c"age"%3a24%7d%5d%2c"goods"%3a%5b%7b"name"%3a"apple"%2c"price"%3a15%2c"num"%3a200%7d%2c%7b"name"%3a"pear"%2c"price"%3a18%2c"num"%3a100%7d%2c%7b"name"%3a"banana"%2c"price"%3a16%2c"num"%3a210%7d%5d%7d%7d&amp;p=name"%3a"(.%2b%3f)"
+
+测试数据：
+{"code":0,"msg":"成功","data":{"users":[{"name":"张三","gender":"male","age":12},{"name":"李四","gender":"female","age":15},{"name":"王五","gender":"male","age":22},{"name":"赵六","gender":"male","age":24}],"goods":[{"name":"apple","price":15,"num":200},{"name":"pear","price":18,"num":100},{"name":"banana","price":16,"num":210}]}}
+
+正则表达式： name":"(.+?)"
+
+返回结果：
+{
+    "数据": {
+        "1": "张三",
+        "2": "李四",
+        "3": "王五",
+        "4": "赵六",
+        "5": "apple",
+        "6": "pear",
+        "7": "banana"
+    },
     "状态": "OK"
 }
 </code>
