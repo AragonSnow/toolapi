@@ -1,8 +1,10 @@
-# Welcome
+# toolapi
 # 这是什么?
 一个简单的工具API
+项目仓库[https://github.com/AragonSnow/toolapi](https://github.com/AragonSnow/toolapi)<br>
+如果有更多api需求，可以留言给我添加
 # 功能
-## 1. 时间戳转换（/timestamp）
+## 1 时间戳转换（/timestamp）
 目前仅支持GMT+8 北京时间
 ### 1.1 参数
 |  参数   | 默认值  | 是否必要参数 | 解释 |
@@ -45,11 +47,11 @@ https://toolapi.us-south.cf.appdomain.cloud/timestamp?t=2020-04-15+11%3a00%3a09
 }
 ```
 
-## 2.正则表达是（/regex）
+## 2. 正则表达是（/regex）
 正则匹配参数并返回匹配结果
 ### 2.1 参数
-|  参数   | 默认值  | 是否必要参数 | 解释 |
-| :----: | :---: | :---- | :---- |
+| 参数 | 默认值 | 是否必要参数 | 解释 |
+| :----: | :---: | :------------- | :---- |
 | data  | "" | 是 | 要匹配的数据 |
 | p  | "" | 是 | 正则表达式 |
 ### 2.2 返回值
@@ -80,5 +82,48 @@ https://toolapi.us-south.cf.appdomain.cloud/regex?data=%7b"code"%3a0%2c"msg"%3a"
     "状态": "OK"
 }
 ```
-
-
+## 3 字符串处理(string)
+目前实现字符串替换功能
+### 3.1 字符串替换(replace)
+| 参数 | 默认值 | 是否必要参数 | 解释 |
+| :----: | :---: | :------------- | :---- |
+| s  | "" | 是 | 要替换的数据 |
+| f  | "" | 是 | 必须是replace |
+| p  | "" | 是 | 要替换的关键词,支持正则 |
+| t  | "" | 是 | 替换后的内容 |
+| r  | "" | 否 | 返回的内容选择是json和纯文本, 默认是返回json,json会先显示转义字符，纯文本不会 |
+### 3.2 字符串替换(replace)
+|  参数  | 解释 |
+| :----: | :---- |
+| 原始字符串 | 输入的内容 |
+| 处理后字符串  |  替换后的字符串 |
+| 状态  |  运行的状态, 非OK都是异常 |
+text
+直接返回替换后的字符串
+### 3.1.3  用例
+```
+返回json
+https://toolapi.us-south.cf.appdomain.cloud/string?p=%E4%BA%BA&t=%E5%AD%97%E7%AC%A6%E4%B8%B2&f=replace&r=json&s={%22text%22:%22%E6%88%91%E6%98%AF%E4%BA%BA%22}
+s = {"text":"我是人"}
+f = replace
+p = 人
+t = 字符串
+r = json   (可不用，默认)
+返回
+{
+    "原始字符串": "{\"text\":\"我是人\"}",
+    "处理后字符串": "{\"text\":\"我是字符串\"}",
+    "状态": "OK"
+}
+```
+```
+返回文本
+https://toolapi.us-south.cf.appdomain.cloud/string?p=%E4%BA%BA&t=%E5%AD%97%E7%AC%A6%E4%B8%B2&f=replace&r=text&s={%22text%22:%22%E6%88%91%E6%98%AF%E4%BA%BA%22}
+s = {"text":"我是人"}
+f = replace
+p = 人
+t = 字符串
+r = text
+返回
+{"text":"我是字符串"}
+```

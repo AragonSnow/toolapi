@@ -1,7 +1,7 @@
 ---
 applications:
 - name: toolapi
-  memory: 128M
+  memory: 256M
   buildpacks: 
   - python_buildpack
   routes:
