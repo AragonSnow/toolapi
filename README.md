@@ -85,6 +85,7 @@ https://toolapi.us-south.cf.appdomain.cloud/regex?data=%7b"code"%3a0%2c"msg"%3a"
 ## 3 字符串处理(string)
 目前实现字符串替换功能
 ### 3.1 字符串替换(replace)
+#### 3.1.1 参数
 | 参数 | 默认值 | 是否必要参数 | 解释 |
 | :----: | :---: | :------------- | :---- |
 | s  | "" | 是 | 要替换的数据 |
@@ -92,15 +93,16 @@ https://toolapi.us-south.cf.appdomain.cloud/regex?data=%7b"code"%3a0%2c"msg"%3a"
 | p  | "" | 是 | 要替换的关键词,支持正则 |
 | t  | "" | 是 | 替换后的内容 |
 | r  | "" | 否 | 返回的内容选择是json和纯文本, 默认是返回json,json会先显示转义字符，纯文本不会 |
-### 3.2 字符串替换(replace)
-|  参数  | 解释 |
-| :----: | :---- |
+#### 3.1.2 返回
+<font color='red'> 如果r = json,返回值如下：</font><br>
+| 参数 | 解释 |
+| :------ | :---- |
 | 原始字符串 | 输入的内容 |
 | 处理后字符串  |  替换后的字符串 |
 | 状态  |  运行的状态, 非OK都是异常 |
-text
-直接返回替换后的字符串
-### 3.1.3  用例
+<font color='red'> 如果r = text,直接返回文本</font><br>
+
+#### 3.1.3  用例
 ```
 返回json
 https://toolapi.us-south.cf.appdomain.cloud/string?p=%E4%BA%BA&t=%E5%AD%97%E7%AC%A6%E4%B8%B2&f=replace&r=json&s={%22text%22:%22%E6%88%91%E6%98%AF%E4%BA%BA%22}
@@ -126,4 +128,37 @@ t = 字符串
 r = text
 返回
 {"text":"我是字符串"}
+```
+## 4 条件(condition)
+### 4.1 判断(judge)
+判断并返回布尔值
+#### 4.1.1 参数
+| 参数 | 默认值 | 是否必要参数 | 解释 |
+| :----: | :---: | :------------- | :---- |
+| s  | "" | 是 | 输入的公式 |
+| f  | "" | 是 | 必须是judge |
+#### 4.1.2 返回
+
+| 参数 | 解释 |
+| :---- | :---- |
+| 公式 | 输入的内容 |
+| 结果  |  判断结果 |
+| 状态  |  运行的状态, 非OK都是异常 |
+#### 4.1.3 用例
+```
+https://toolapi.us-south.cf.appdomain.cloud/condition?f=judge&s=1%20%3E%202
+返回：
+{
+    "公式": "1 > 2",
+    "结果": false,
+    "状态": "OK"
+}
+https://toolapi.us-south.cf.appdomain.cloud/condition?f=judge&s=%272%27%3E%271%27
+返回：
+{
+    "公式": "'2'>'1'",
+    "结果": true,
+    "状态": "OK"
+}
+
 ```

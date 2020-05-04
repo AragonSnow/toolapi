@@ -15,8 +15,8 @@ app = Flask(__name__)
 #app.config['SECRET_KEY'] = 'hard to guess string'
 
 @app.route('/', methods=['GET', 'POST'])
-def form():
-    return render_template('index.html')
+def home():
+    return render_template('./index.html')
 
 @app.route('/timestamp', methods=['GET', 'POST'])
 def timestamp():
@@ -145,8 +145,23 @@ def strf():
         Rtv = json.dumps(Rtv, ensure_ascii=False, indent=4)
         return Response(Rtv, mimetype='application/json')
     
+@app.route('/condition', methods=['GET', 'POST'])
+def judge():
+    Rtv = {}
     
-
+    f = request.args.get("f", default="")
+    try:
+        if (f != ""):
+            if (f.find("judge") > -1):
+                Rtv["公式"] = request.args.get("s", default="")
+                Rtv["结果"] = eval(Rtv["公式"])
+                Rtv["状态"] = "OK"
+        else:
+            Rtv["状态"] = "请选择功能"
+    except Exception as e:
+        Rtv["状态"] = str(e)
+        
+    return Response(json.dumps(Rtv, ensure_ascii=False, indent=4), mimetype='application/json')
 
 port = int(os.getenv('PORT', 80))
 if __name__ == "__main__":
