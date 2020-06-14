@@ -129,4 +129,6 @@ dmypy.json
 .pyre/
 
 .vs
+venv37
+.vscode
 

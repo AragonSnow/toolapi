@@ -10,9 +10,25 @@ import pytz
 from dateutil.parser import parse
 import jsonpath
 import base64
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP, PKCS1_v1_5
+from Crypto import Random
 
 app = Flask(__name__)
 #app.config['SECRET_KEY'] = 'hard to guess string'
+
+def request_parse(req_data):
+    '''解析请求数据并以json形式返回'''
+    if req_data.method == 'POST':
+        if (req_data.content_type.find('www-form-urlencoded') > -1):
+            data = req_data.form
+        elif (req_data.content_type.find('json') > -1):
+            data = req_data.json
+        else:
+            data = req_data.form
+    elif req_data.method == 'GET':
+        data = req_data.args
+    return data
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -145,23 +161,96 @@ def strf():
         Rtv = json.dumps(Rtv, ensure_ascii=False, indent=4)
         return Response(Rtv, mimetype='application/json')
     
-@app.route('/condition', methods=['GET', 'POST'])
-def judge():
-    Rtv = {}
     
-    f = request.args.get("f", default="")
+@app.route('/rsa/encode', methods=["GET","POST"])
+def RSAEncode():
     try:
-        if (f != ""):
-            if (f.find("judge") > -1):
-                Rtv["公式"] = request.args.get("s", default="")
-                Rtv["结果"] = eval(Rtv["公式"])
-                Rtv["状态"] = "OK"
+        res_data = request_parse(request)
+        key = res_data.get("key", None)
+        data = res_data.get("data", None)
+        if (key) and (data):
+            lines = ""
+            if request.method == 'POST':
+                for line in key.split("\n"):
+                    if (line.find("--") < 0):
+                        line = line.replace(" ", "+")
+                    lines = lines+line+"\n"
+            elif request.method == 'GET':
+                temp = key
+                temp = temp.replace("-----BEGIN PUBLIC KEY-----", "")
+                temp = temp.replace("-----END PUBLIC KEY-----", "")
+                lines = "-----BEGIN PUBLIC KEY-----\n"
+
+                while(temp):
+                    line = temp[0:63]
+                    lines = lines+line+"\n"
+                    temp = temp.replace(line, "")
+
+                lines = lines+ "-----END PUBLIC KEY-----"
+            else:
+                raise Exception(u"请求方式错误")
+
+            private_key = RSA.import_key(lines)
+            cipher_rsa = PKCS1_v1_5.new(private_key)
+            crypt_text = cipher_rsa.encrypt(bytes(data, encoding="utf-8"))
+            crypt_text = base64.b64encode(crypt_text).decode('utf8')
+            print(crypt_text)
+            return crypt_text
         else:
-            Rtv["状态"] = "请选择功能"
+            raise Exception("参数不完整，请确认")
     except Exception as e:
-        Rtv["状态"] = str(e)
-        
-    return Response(json.dumps(Rtv, ensure_ascii=False, indent=4), mimetype='application/json')
+        return str(e)
+
+@app.route('/rsa', methods=["GET","POST"])
+def RSADecode():
+    try:
+        res_data = request_parse(request)
+        key = res_data.get("key", None)
+        data = res_data.get("data", None)
+        func = res_data.get("f", None)
+        if (key) and (data) and (func):
+            lines = ""
+            if request.method == 'POST':
+                for line in key.split("\n"):
+                    if (line.find("--") < 0):
+                        line = line.replace(" ", "+")
+                    lines = lines+line+"\n"
+                data = data.replace(" ", "+")
+            elif request.method == 'GET':
+                temp = key
+                temp = re.findall("-----.*?-----", temp)
+                if (len(temp) == 2):
+                    keytemp = key
+                    for t in temp:
+                        keytemp = keytemp.replace(t, "")
+
+                    while(keytemp):
+                        line = keytemp[0:63]
+                        lines = lines+line+"\n"
+                        keytemp = keytemp.replace(line, "")
+                    
+                    lines = temp[0]+"\n" + lines + temp[1]
+
+                else:
+                    return "证书格式错误"
+            else:
+                return "请求方式错误"
+
+            cipher_rsa = PKCS1_v1_5.new(RSA.import_key(lines))
+            if (func.find("encode") > -1):
+                crypt_text = cipher_rsa.encrypt(bytes(data, encoding="utf-8"))
+                crypt_text = base64.b64encode(crypt_text).decode('utf8')
+                return crypt_text
+            elif (func.find("decode") > -1): 
+                decrypt_text = cipher_rsa.decrypt(base64.b64decode(data), Random.new().read)
+                decrypt_text = decrypt_text.decode('utf8')
+                return decrypt_text
+            else:
+                return "功能选择错误"
+        else:
+            return "参数不完整，请确认"
+    except Exception as e:
+        return str(e)
 
 port = int(os.getenv('PORT', 80))
 if __name__ == "__main__":

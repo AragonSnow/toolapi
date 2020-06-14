@@ -47,7 +47,7 @@ https://toolapi.us-south.cf.appdomain.cloud/timestamp?t=2020-04-15+11%3a00%3a09
 }
 ```
 
-## 2. 正则表达是（/regex）
+## 2. 正则表达式（/regex）
 正则匹配参数并返回匹配结果
 ### 2.1 参数
 | 参数 | 默认值 | 是否必要参数 | 解释 |
@@ -161,4 +161,83 @@ https://toolapi.us-south.cf.appdomain.cloud/condition?f=judge&s=%272%27%3E%271%2
     "状态": "OK"
 }
 
+```
+## 5 加密/解密(Encrypt/Decrypt)
+目前仅支持RSA 的PKCS1_v1_5加解密
+### 5.1 RSA加密
+#### 5.1.1 参数
+| 参数 | 默认值 | 是否必要参数 | 解释 |
+| :----: | :---: | :------------- | :---- |
+| data  | "" | 是 | 要加密的数据 |
+| key  | "" | 是 | 加密的公钥，必须以-----BEGIN PUBLIC KEY-----开头，以-----END PUBLIC KEY-----结尾 |
+| f  | "" | 是 | 必须是encode |
+#### 5.1.2 返回
+加密后的密文
+#### 5.1.3 方法
+支持POST和GET
+#### 5.1.4 用例
+##### 5.1.4.1 GET
+[点我测试](https://toolapi.us-south.cf.appdomain.cloud/rsa?f=encode&key=-----BEGIN%20PRIVATE%20KEY-----MIICeQIBADANBgkqhkiG9w0BAQEFAASCAmMwggJfAgEAAoGBANrKAX5%2B%2B8LosMeeSFYvouaeKu7uQSwN3b9b9aLBwaF%2Bu9VDG9luUoF57Ll8QMn7XyXTZmhjr8tMvsfRQqMx7yf%2Fu9SAeKNvzUNKJsIqPdXreuNV6HbXz5IR0Yk31Exap7JbsSpu2fp5DQiI6GJvnWIUcEKWe7MEfhPf8R4dqB7LAgMBAAECgYEAjjWbPwN%2B1TO2JCoHzq1r7waD1YXbqqzgo488XCwglb3wjS%2FvnCaPTkVXz0CqRB81uzpraBLTowshPnQQIk9EqMCz7%2BwSfbeZH8v7xUVcExcxJZZlaTPogAZiDnYXiD6LzWzKmxsPn1EkRvemH5jNBGhCFq2IBw%2By%2Bkd%2FEMz26QECQQD9rUzVgf4RkkLE88u%2F4DtNedRNif2v7pFq2Fj9BvnrnJv8t1pHh6geyIeZnHS%2Bycc8qFRwgjbVUnls0MzqiS%2BLAkEA3Mrq2fTkdQObx4963KMxefTqHKz8bFGfy4kmqVHnxg0SHNI41QI8CkTviYWyrqW7VeWf20tMFaEFOgnNnJq1wQJBAKggMlsTE3s7z4rO9YvOph8cDmvxd7QhTjlc9%2BWCuSLBodRlBK2BqBf22YAiZHGKM8Ts30HN21%2BYkKdg317V2y8CQQC5LQKdPDPjI9yiGWcM513WkB9NX5PxcN%2FZP7UKKyR9SXcYbwO1OsOKRVi0%2BUnsChm9J%2FHTZSpxtXOBwrkMkADBAkEAh0ALcGYRjArv0V033k9DEsmfjr2ArdeJBUk5UT4PFHoVvwe3MR5rJLeVybzi2ulLCsCKMCrBKDy45vLgdSZ44g%3D%3D-----END%20PRIVATE%20KEY-----&data=123456)
+```
+key:-----BEGIN PRIVATE KEY-----MIICeQIBADANBgkqhkiG9w0BAQEFAASCAmMwggJfAgEAAoGBANrKAX5++8LosMeeSFYvouaeKu7uQSwN3b9b9aLBwaF+u9VDG9luUoF57Ll8QMn7XyXTZmhjr8tMvsfRQqMx7yf/u9SAeKNvzUNKJsIqPdXreuNV6HbXz5IR0Yk31Exap7JbsSpu2fp5DQiI6GJvnWIUcEKWe7MEfhPf8R4dqB7LAgMBAAECgYEAjjWbPwN+1TO2JCoHzq1r7waD1YXbqqzgo488XCwglb3wjS/vnCaPTkVXz0CqRB81uzpraBLTowshPnQQIk9EqMCz7+wSfbeZH8v7xUVcExcxJZZlaTPogAZiDnYXiD6LzWzKmxsPn1EkRvemH5jNBGhCFq2IBw+y+kd/EMz26QECQQD9rUzVgf4RkkLE88u/4DtNedRNif2v7pFq2Fj9BvnrnJv8t1pHh6geyIeZnHS+ycc8qFRwgjbVUnls0MzqiS+LAkEA3Mrq2fTkdQObx4963KMxefTqHKz8bFGfy4kmqVHnxg0SHNI41QI8CkTviYWyrqW7VeWf20tMFaEFOgnNnJq1wQJBAKggMlsTE3s7z4rO9YvOph8cDmvxd7QhTjlc9+WCuSLBodRlBK2BqBf22YAiZHGKM8Ts30HN21+YkKdg317V2y8CQQC5LQKdPDPjI9yiGWcM513WkB9NX5PxcN/ZP7UKKyR9SXcYbwO1OsOKRVi0+UnsChm9J/HTZSpxtXOBwrkMkADBAkEAh0ALcGYRjArv0V033k9DEsmfjr2ArdeJBUk5UT4PFHoVvwe3MR5rJLeVybzi2ulLCsCKMCrBKDy45vLgdSZ44g==-----END PRIVATE KEY-----
+data:123456
+f:encode
+返回：xvDXgDh18KhAl8u6bc87q9GAlDWarbX2U+z1QBrbAXqu6H71Yy/24g9iSPOP5YrGnjLcKwuBENn0Lioe97LQyrYUYxOPbecPWhHmhpLg+QxSlSDfqkp0L2SCHwa+9NlQqUWvCy8ID9mYuHpYu+I5yHMps6twqZWKVEr7Qyk6hy8=
+
+```
+##### 5.1.4.1 POST
+```
+url:https://toolapi.us-south.cf.appdomain.cloud/rsa
+Request Payload:
+data=1234&f=encode&key=-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDaygF+fvvC6LDHnkhWL6Lmniru
+7kEsDd2/W/WiwcGhfrvVQxvZblKBeey5fEDJ+18l02ZoY6/LTL7H0UKjMe8n/7vU
+gHijb81DSibCKj3V63rjVeh218+SEdGJN9RMWqeyW7Eqbtn6eQ0IiOhib51iFHBC
+lnuzBH4T3/EeHageywIDAQAB
+-----END PUBLIC KEY-----
+返回：EWRyaIxVrcm0+MFOT8zINkYuOA8ktOunr4jNmxxAlA4oIzPi3b6YYB6jCDDhasmpjFVDI1aYlr6yNyOUZg6EodD0ian+kGn/c008EwVhYojPaw7tShr6nsAZA2UtE5OneKqOu/bQVmLOgwMIWZcWqhKgJ5ncMNrRw0bET+dSuh0=
+```
+### 5.2 RSA解密
+#### 5.1.1 参数
+| 参数 | 默认值 | 是否必要参数 | 解释 |
+| :----: | :---: | :------------- | :---- |
+| data  | "" | 是 | 要解密的数据 |
+| key  | "" | 是 | 私钥 必须以-----BEGIN PRIVATE KEY-----开头，以-----END PRIVATE KEY-----结尾|
+| f  | "" | 是 | 必须是decode |
+#### 5.1.2 返回
+解密后的文本
+#### 5.1.3 方法
+支持POST和GET
+#### 5.1.4 用例
+##### 5.1.4.1 GET
+[点我测试](https://toolapi.us-south.cf.appdomain.cloud/rsa?f=decode&key=-----BEGIN%20PRIVATE%20KEY-----MIICeQIBADANBgkqhkiG9w0BAQEFAASCAmMwggJfAgEAAoGBANrKAX5%2B%2B8LosMeeSFYvouaeKu7uQSwN3b9b9aLBwaF%2Bu9VDG9luUoF57Ll8QMn7XyXTZmhjr8tMvsfRQqMx7yf%2Fu9SAeKNvzUNKJsIqPdXreuNV6HbXz5IR0Yk31Exap7JbsSpu2fp5DQiI6GJvnWIUcEKWe7MEfhPf8R4dqB7LAgMBAAECgYEAjjWbPwN%2B1TO2JCoHzq1r7waD1YXbqqzgo488XCwglb3wjS%2FvnCaPTkVXz0CqRB81uzpraBLTowshPnQQIk9EqMCz7%2BwSfbeZH8v7xUVcExcxJZZlaTPogAZiDnYXiD6LzWzKmxsPn1EkRvemH5jNBGhCFq2IBw%2By%2Bkd%2FEMz26QECQQD9rUzVgf4RkkLE88u%2F4DtNedRNif2v7pFq2Fj9BvnrnJv8t1pHh6geyIeZnHS%2Bycc8qFRwgjbVUnls0MzqiS%2BLAkEA3Mrq2fTkdQObx4963KMxefTqHKz8bFGfy4kmqVHnxg0SHNI41QI8CkTviYWyrqW7VeWf20tMFaEFOgnNnJq1wQJBAKggMlsTE3s7z4rO9YvOph8cDmvxd7QhTjlc9%2BWCuSLBodRlBK2BqBf22YAiZHGKM8Ts30HN21%2BYkKdg317V2y8CQQC5LQKdPDPjI9yiGWcM513WkB9NX5PxcN%2FZP7UKKyR9SXcYbwO1OsOKRVi0%2BUnsChm9J%2FHTZSpxtXOBwrkMkADBAkEAh0ALcGYRjArv0V033k9DEsmfjr2ArdeJBUk5UT4PFHoVvwe3MR5rJLeVybzi2ulLCsCKMCrBKDy45vLgdSZ44g%3D%3D-----END%20PRIVATE%20KEY-----&data=EWRyaIxVrcm0%2BMFOT8zINkYuOA8ktOunr4jNmxxAlA4oIzPi3b6YYB6jCDDhasmpjFVDI1aYlr6yNyOUZg6EodD0ian%2BkGn%2Fc008EwVhYojPaw7tShr6nsAZA2UtE5OneKqOu%2FbQVmLOgwMIWZcWqhKgJ5ncMNrRw0bET%2BdSuh0%3D)
+```
+key:-----BEGIN PRIVATE KEY-----MIICeQIBADANBgkqhkiG9w0BAQEFAASCAmMwggJfAgEAAoGBANrKAX5++8LosMeeSFYvouaeKu7uQSwN3b9b9aLBwaF+u9VDG9luUoF57Ll8QMn7XyXTZmhjr8tMvsfRQqMx7yf/u9SAeKNvzUNKJsIqPdXreuNV6HbXz5IR0Yk31Exap7JbsSpu2fp5DQiI6GJvnWIUcEKWe7MEfhPf8R4dqB7LAgMBAAECgYEAjjWbPwN+1TO2JCoHzq1r7waD1YXbqqzgo488XCwglb3wjS/vnCaPTkVXz0CqRB81uzpraBLTowshPnQQIk9EqMCz7+wSfbeZH8v7xUVcExcxJZZlaTPogAZiDnYXiD6LzWzKmxsPn1EkRvemH5jNBGhCFq2IBw+y+kd/EMz26QECQQD9rUzVgf4RkkLE88u/4DtNedRNif2v7pFq2Fj9BvnrnJv8t1pHh6geyIeZnHS+ycc8qFRwgjbVUnls0MzqiS+LAkEA3Mrq2fTkdQObx4963KMxefTqHKz8bFGfy4kmqVHnxg0SHNI41QI8CkTviYWyrqW7VeWf20tMFaEFOgnNnJq1wQJBAKggMlsTE3s7z4rO9YvOph8cDmvxd7QhTjlc9+WCuSLBodRlBK2BqBf22YAiZHGKM8Ts30HN21+YkKdg317V2y8CQQC5LQKdPDPjI9yiGWcM513WkB9NX5PxcN/ZP7UKKyR9SXcYbwO1OsOKRVi0+UnsChm9J/HTZSpxtXOBwrkMkADBAkEAh0ALcGYRjArv0V033k9DEsmfjr2ArdeJBUk5UT4PFHoVvwe3MR5rJLeVybzi2ulLCsCKMCrBKDy45vLgdSZ44g==-----END PRIVATE KEY-----
+
+data:EWRyaIxVrcm0+MFOT8zINkYuOA8ktOunr4jNmxxAlA4oIzPi3b6YYB6jCDDhasmpjFVDI1aYlr6yNyOUZg6EodD0ian+kGn/c008EwVhYojPaw7tShr6nsAZA2UtE5OneKqOu/bQVmLOgwMIWZcWqhKgJ5ncMNrRw0bET+dSuh0=
+f:decode
+返回：1234
+
+```
+##### 5.1.4.1 POST
+```
+url:https://toolapi.us-south.cf.appdomain.cloud/rsa
+Request Payload:
+data={{d}}&f=decode&key=-----BEGIN PRIVATE KEY-----
+MIICeQIBADANBgkqhkiG9w0BAQEFAASCAmMwggJfAgEAAoGBANrKAX5++8LosMee
+SFYvouaeKu7uQSwN3b9b9aLBwaF+u9VDG9luUoF57Ll8QMn7XyXTZmhjr8tMvsfR
+QqMx7yf/u9SAeKNvzUNKJsIqPdXreuNV6HbXz5IR0Yk31Exap7JbsSpu2fp5DQiI
+6GJvnWIUcEKWe7MEfhPf8R4dqB7LAgMBAAECgYEAjjWbPwN+1TO2JCoHzq1r7waD
+1YXbqqzgo488XCwglb3wjS/vnCaPTkVXz0CqRB81uzpraBLTowshPnQQIk9EqMCz
+7+wSfbeZH8v7xUVcExcxJZZlaTPogAZiDnYXiD6LzWzKmxsPn1EkRvemH5jNBGhC
+Fq2IBw+y+kd/EMz26QECQQD9rUzVgf4RkkLE88u/4DtNedRNif2v7pFq2Fj9Bvnr
+nJv8t1pHh6geyIeZnHS+ycc8qFRwgjbVUnls0MzqiS+LAkEA3Mrq2fTkdQObx496
+3KMxefTqHKz8bFGfy4kmqVHnxg0SHNI41QI8CkTviYWyrqW7VeWf20tMFaEFOgnN
+nJq1wQJBAKggMlsTE3s7z4rO9YvOph8cDmvxd7QhTjlc9+WCuSLBodRlBK2BqBf2
+2YAiZHGKM8Ts30HN21+YkKdg317V2y8CQQC5LQKdPDPjI9yiGWcM513WkB9NX5Px
+cN/ZP7UKKyR9SXcYbwO1OsOKRVi0+UnsChm9J/HTZSpxtXOBwrkMkADBAkEAh0AL
+cGYRjArv0V033k9DEsmfjr2ArdeJBUk5UT4PFHoVvwe3MR5rJLeVybzi2ulLCsCK
+MCrBKDy45vLgdSZ44g==
+-----END PRIVATE KEY-----
+返回：1234
 ```
